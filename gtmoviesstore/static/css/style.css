@@ -1,0 +1,72 @@
+/*School colors
+Blue: #003057
+Gold: #B3A369
+White: #FFFFFF
+*/
+
+.bg-blue {
+  background-color:#003057;
+}
+.bg-gold {
+  background-color: #b3a369;
+}
+.bg-white {
+  background-color: #FFFFFF;
+}
+
+.img-card-200 {
+  width: fit-content;
+  max-height: 200px;
+}
+.img-card-400 {
+  width: fit-content;
+  max-height: 400px;
+}
+
+.blue-btn {
+  --bs-btn-bg: #003057;
+  --bs-btn-color: #ffffff;
+  --bs-btn-hover-bg: #024091;
+}
+
+.bg-index{
+  background: url("/static/img/background.jpg") no-repeat fixed;
+  background-size: 100% auto;
+}
+.navbar a.nav-link {
+  color: #FFFFFF;
+}
+
+nav {
+  background-color:#003057;
+}
+
+/* Fotter CSS Things */
+/* Glue footer and header to take static space, main body takes dynamic space */
+.wrapper {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100dvh;
+}
+.ms-footer {
+  background-color: #202020;
+}
+.ms-footer p {
+  color: #7F7F7F;
+  font-size: 13px;
+}
+.ms-footer a:hover {
+  color: #6ab43e;
+  text-decoration: none;
+}
+.ms-footer-bottom span{
+  font-size: 13px;
+  line-height: 38px;
+}
+.ms-footer-bottom a {
+  color: #6ab43e;
+  text-decoration: none;
+}
+.ms-footer-bottom a:hover {
+  color: #fff;
+}
