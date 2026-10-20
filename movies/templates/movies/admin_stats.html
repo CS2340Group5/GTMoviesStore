@@ -17,6 +17,7 @@
                     <option value="">-- Select --</option>
                     <option value="purchases" {% if template_data.sort_by == 'purchases' %}selected{% endif %}>Most Purchases</option>
                     <option value="comments" {% if template_data.sort_by == 'comments' %}selected{% endif %}>Most Comments</option>
+                    <option value="commenter" {% if template_data.sort_by == 'commenter' %}selected{% endif %}>Top Commenter</option>
                   </select>
                 </div>
               </div>
@@ -28,6 +29,33 @@
         </p>
       </div>
     </div>
+    {% if template_data.sort_by == 'commenter' %}
+    <div class="card mb-4">
+          <div class="card-header">
+            Top Commenters
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered
+              table-striped text-center mt-3">
+              <thead>
+                <tr>
+                  <th scope="col">Rank</th>
+                  <th scope="col">User</th>
+                  <th scope="col">Total Comments</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user in template_data.users %}
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ user.username }}</td>
+                  <td>{{ user.num_reviews|default:"0" }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    {% else %}
     <div class="row">
       {% for movie in template_data.movies %}
       <div class="col-md-4 col-lg-3 mb-2">
@@ -47,6 +75,7 @@
       </div>
       {% endfor %}
     </div>
+    {% endif %}
   </div>
 </div>
 {% endblock content %}
