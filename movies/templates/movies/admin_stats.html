@@ -18,6 +18,7 @@
                     <option value="purchases" {% if template_data.sort_by == 'purchases' %}selected{% endif %}>Most Purchases</option>
                     <option value="comments" {% if template_data.sort_by == 'comments' %}selected{% endif %}>Most Comments</option>
                     <option value="commenter" {% if template_data.sort_by == 'commenter' %}selected{% endif %}>Top Commenter</option>
+                    <option value="buyers" {% if template_data.sort_by == 'buyers' %}selected{% endif %}>Top Buyer</option>
                   </select>
                 </div>
               </div>
@@ -29,7 +30,40 @@
         </p>
       </div>
     </div>
-    {% if template_data.sort_by == 'commenter' %}
+    {% if template_data.sort_by == 'buyers' %}
+    {% if template_data.top_buyer %}
+    <div class="card mb-4 border-success">
+      <div class ="card-header bg-success text-white">Top Buyer</div>
+      <div class="card-body text-center">
+        <h3 class = "mb-1">{{ template_data.top_buyer.username }}</h3>
+        <p class = "mb-0">{{ template_data.top_buyer.movies_bought }} movies purchased</p>
+      </div> 
+    </div>
+    {% endif %}
+    <div class ="card mb-4">
+      <div class ="card-header"> Users by Movies Purchased</div>
+      <div class = "card-body">
+        <table class = "table table-bordered table-striped text-center mt-3">
+          <thead>
+            <tr>
+              <th scope="col">Rank</th>
+              <th scope="col">User</th>
+              <th scope="col">Movies Purchased</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in template_data.users %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.movies_bought }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% elif template_data.sort_by == 'commenter' %}
     <div class="card mb-4">
           <div class="card-header">
             Top Commenters

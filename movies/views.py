@@ -3,6 +3,7 @@ from .models import Movie, Review, Report, User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.db.models import Sum, Count
+from django.db.models.functions import Coalesce
 
 # Create your views here.
 
@@ -80,6 +81,7 @@ def admin_statistics(request):
     movies = Movie.objects.all()
     users = User.objects.all()
     sort_by = request.GET.get('sort')
+    top_buyer = None
 
     if sort_by == 'purchases':
         movies = movies.annotate(total_sales=Sum('item__quantity')).order_by('-total_sales')
@@ -87,12 +89,16 @@ def admin_statistics(request):
         movies = movies.annotate(num_reviews=Count('review')).order_by('-num_reviews')
     elif sort_by == 'commenter':
         users = users.annotate(num_reviews=Count('review')).order_by('-num_reviews')
-
+    elif sort_by == 'buyers':
+        users = users.annotate(movies_bought = Coalesce(Sum('order__item__quantity'), 0)).order_by('-movies_bought', 'username')
+        top_buyer = users.first()
+        
     template_data = {
         'title' : 'Admin Statistics',
         'movies' : movies,
         'users' : users,
-        'sort_by' : sort_by
+        'sort_by' : sort_by,
+        'top_buyer' : top_buyer
     }
 
     return render(request, 'movies/admin_stats.html', {'template_data' : template_data})
