@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Movie, Review, Report
+from .models import Movie, Review, Report, User
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from django.db.models import Sum, Count
+from django.db.models.functions import Coalesce
 
 # Create your views here.
 
@@ -69,3 +72,33 @@ def report(request, id, review_id):
     report.review = review
     report.save()
     return redirect('movies.show', id=id)
+
+@login_required
+def admin_statistics(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("You do not have access to view this page.")
+
+    movies = Movie.objects.all()
+    users = User.objects.all()
+    sort_by = request.GET.get('sort')
+    top_buyer = None
+
+    if sort_by == 'purchases':
+        movies = movies.annotate(total_sales=Sum('item__quantity')).order_by('-total_sales')
+    elif sort_by == 'comments':
+        movies = movies.annotate(num_reviews=Count('review')).order_by('-num_reviews')
+    elif sort_by == 'commenter':
+        users = users.annotate(num_reviews=Count('review')).order_by('-num_reviews')
+    elif sort_by == 'buyers':
+        users = users.annotate(movies_bought = Coalesce(Sum('order__item__quantity'), 0)).order_by('-movies_bought', 'username')
+        top_buyer = users.first()
+        
+    template_data = {
+        'title' : 'Admin Statistics',
+        'movies' : movies,
+        'users' : users,
+        'sort_by' : sort_by,
+        'top_buyer' : top_buyer
+    }
+
+    return render(request, 'movies/admin_stats.html', {'template_data' : template_data})
