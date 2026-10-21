@@ -70,3 +70,13 @@ nav {
 .ms-footer-bottom a:hover {
   color: #fff;
 }
+
+.star-btn, .star-btn-g {
+  background: none;
+  border: none;
+  color: #003057;
+  font-size: 1.5rem;
+}
+.star-btn-g {
+  color: #b3a369;
+}

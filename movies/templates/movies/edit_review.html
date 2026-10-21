@@ -13,6 +13,46 @@
             <textarea name="comment" required
             class="form-control" id="comment">{{ template_data.review.comment }}</textarea>
           </p>
+          <div class="column col-5">
+            <button type="button" class="star-btn" id="star-1"><i class="fa-solid fa-star"></i></button>
+            <button type="button" class="star-btn" id="star-2"><i class="fa-solid fa-star"></i></button>
+            <button type="button" class="star-btn" id="star-3"><i class="fa-solid fa-star"></i></button>
+            <button type="button" class="star-btn" id="star-4"><i class="fa-solid fa-star"></i></button>
+            <button type="button" class="star-btn" id="star-5"><i class="fa-solid fa-star"></i></button>
+            <input type="hidden" name="rating" id="rating" value="{{ template_data.review.rating }}">
+            <!--Rating Script-->
+            <script>
+            const btn1 = document.getElementById("star-1");
+            const btn2 = document.getElementById("star-2");
+            const btn3 = document.getElementById("star-3");
+            const btn4 = document.getElementById("star-4");
+            const btn5 = document.getElementById("star-5");
+            const rating = document.getElementById("rating");
+
+            const stars = [btn1, btn2, btn3, btn4, btn5]
+            
+            for (let j=0; j<5;j++) {
+              if (j > rating.value-1) {
+                stars[j].style.color = "#003057"
+              } else {
+                stars[j].style.color = "#b3a369"
+              }
+            }
+            
+            for (let i=0; i<5; i++) {
+              stars[i].addEventListener('click', () => {
+                rating.value = i+1
+                for (let j=0; j<5;j++) {
+                  if (j > i) {
+                    stars[j].style.color = "#003057"
+                  } else {
+                    stars[j].style.color = "#b3a369"
+                  }
+                }
+              })
+            }
+            </script>
+          </div>
           <div class="text-start">
             <button type="submit"
               class="btn bg-dark text-white">Edit Review

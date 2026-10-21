@@ -26,15 +26,29 @@ def show(request, id):
     template_data['title'] = movie.name
     template_data['movie'] = movie
     template_data['reviews'] = Review.objects.filter(movie=movie)
+
+    total = 0
+    count = 0
+
+    for review in template_data['reviews']:
+        if review.rating != 0:
+            total += review.rating
+            count += 1
+    if count == 0:
+        template_data['average_rating'] = ''
+    else:
+        template_data['average_rating'] = f"{(total / count):.2f}"
+
     return render(request, 'movies/show.html',
                   {'template_data': template_data})
 
 @login_required
 def create_review(request, id):
-    if request.method == 'POST' and request.POST['comment'] != '':
+    if request.method == 'POST' and (request.POST['comment'] != '' or request.POST['rating'] != 0):
         movie = Movie.objects.get(id=id)
         review = Review()
         review.comment = request.POST['comment']
+        review.rating = request.POST['rating']
         review.movie = movie
         review.user = request.user
         review.save()
@@ -55,6 +69,7 @@ def edit_review(request, id, review_id):
     elif request.method == 'POST' and request.POST['comment'] != '':
         review = Review.objects.get(id=review_id)
         review.comment = request.POST['comment']
+        review.rating = request.POST['rating']
         review.save()
 
     return redirect('movies.show', id=id)
