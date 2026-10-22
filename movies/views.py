@@ -44,7 +44,7 @@ def show(request, id):
 
 @login_required
 def create_review(request, id):
-    if request.method == 'POST' and (request.POST['comment'] != '' or request.POST['rating'] != 0):
+    if request.method == 'POST' and (request.POST['comment'] != '' or request.POST['rating'] != '0'):
         movie = Movie.objects.get(id=id)
         review = Review()
         review.comment = request.POST['comment']
@@ -113,7 +113,9 @@ def admin_statistics(request):
         'movies' : movies,
         'users' : users,
         'sort_by' : sort_by,
-        'top_buyer' : top_buyer
+        'top_buyer' : top_buyer,
+        'most_bought' : Movie.objects.annotate(total_sales=Coalesce(Sum('item__quantity'), 0)).order_by('-total_sales').first(),
+        'most_reviewed' : Movie.objects.annotate(num_reviews=Count('review')).order_by('-num_reviews').first(),
     }
 
     return render(request, 'movies/admin_stats.html', {'template_data' : template_data})
@@ -124,7 +126,7 @@ def admin_best_buyers(request):
             return HttpResponseForbidden("You do not have access to view this page.")
     users = User.objects.annotate(
         movies_purchased = Coalesce(Sum('order__item__quantity'), 0)
-    ).order_by('-movie_purchased', 'username')
+    ).order_by('-movies_purchased', 'username')
     total_users = users.count()
     list_size = None
     error = None

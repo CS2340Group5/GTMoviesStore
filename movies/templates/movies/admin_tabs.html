@@ -2,6 +2,11 @@
     <li class="nav_item">
         <a class="nav_link {% if active_tab == 'stats' %}active{% endif %}"
         {% if active_tab == 'stats' %}aria-current="page"{% endif %}
-        href="{% url 'movies.admin_stats' %}">Greatest Purchesers List</a>
+        href="{% url 'movies.admin_stats' %}">Statistics</a>
+    </li>
+    <li class="nav_item">
+        <a class="nav_link {% if active_tab == 'best_buyers' %}active{% endif %}"
+        {% if active_tab == 'best_buyers' %}aria-current="page"{% endif %}
+        href="{% url 'movies.admin_best_buyers' %}">Greatest Purchasers List</a>
     </li>
 </ul>

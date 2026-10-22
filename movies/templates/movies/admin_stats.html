@@ -31,6 +31,28 @@
         </p>
       </div>
     </div>
+    {% if template_data.most_bought %}
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="card border-primary h-100">
+          <div class="card-header bg-primary text-white">Most Purchased Movie</div>
+          <div class="card-body text-center">
+            <h3 class="mb-1">{{ template_data.most_bought.name }}</h3>
+            <p class="mb-0">{{ template_data.most_bought.total_sales }} purchases</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card border-primary h-100">
+          <div class="card-header bg-primary text-white">Most Reviewed Movie</div>
+          <div class="card-body text-center">
+            <h3 class="mb-1">{{ template_data.most_reviewed.name }}</h3>
+            <p class="mb-0">{{ template_data.most_reviewed.num_reviews }} reviews</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
     {% if template_data.sort_by == 'buyers' %}
     {% if template_data.top_buyer %}
     <div class="card mb-4 border-success">
