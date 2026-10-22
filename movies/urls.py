@@ -12,5 +12,6 @@ urlpatterns = [
             views.delete_review, name='movies.delete_review'),
     path('<int:id>/review/<int:review_id>/report/',
           views.report, name='movies.report'),
-    path('admin-stats/', views.admin_statistics, name='movies.admin_stats')
+    path('admin-stats/', views.admin_statistics, name='movies.admin_stats'),
+    path('admin-stats/best-buyers/', views.admin_best_buyers, name='movies.admin_best_buyers')
 ]

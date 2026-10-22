@@ -1,0 +1,7 @@
+<ul class="tabs">
+    <li class="nav_item">
+        <a class="nav_link {% if active_tab == 'stats' %}active{% endif %}"
+        {% if active_tab == 'stats' %}aria-current="page"{% endif %}
+        href="{% url 'movies.admin_stats' %}">Greatest Purchesers List</a>
+    </li>
+</ul>

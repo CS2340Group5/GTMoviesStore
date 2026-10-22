@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-3">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col mx-auto mb-3">
+        <h2>Admin Statistics</h2>
+        <hr />
+        {% include 'movies/admin_tabs.html' with active_tab ='best_buyers' %}
+          <form method="GET">
+            <div class="row g-2">
+              <div class="col-auto">
+                <div class="input-group">
+                  <div class="input-group-text">List size</div>
+                  <input type="number" min="1" name="size" class="form-control"
+                  placeholder="All users"
+                  value="{{ template_data.list_size|default_if_none:'' }}">
+                </div>
+              </div>
+              <div class="col-auto">
+                <button class="btn bg-dark text-white" type="submit">Apply</button>
+              </div>
+              <div class="col-auto">
+                <a class="btn btn-outline-secondary"
+                href="{% url 'movies.admin_best_buyers' %}">Show all</a>
+              </div>
+            </div>
+          </form>
+          {% if template_data.error %}
+          <div class="alert alert-warnng mt-3 mb-0" role="alert">
+            {{ template_data.error }}
+          </div>
+          {% endif %}
+      </div>
+      </div>
+      <div class="card mb-4">
+        <div class="card-header">
+            {% if template_data.list_size %}
+            Top {{ template_data.shown_count }} of {{ template_data.total_users }} users by movies purchased
+            {% else %}
+            All {{ template_data.total_users }} users by movies purchased
+            {% endif %}
+        </div>
+        <div class="card-body">
+        <table class="table table-bordered table-striped text-center mt-3">
+            <thead>
+                <tr>
+                    <th scope="col">Rank</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Movies Purchased</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for buyer in template_data.users %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ buyer.username }}</td>
+                    <td>{{ buyer.movies_purchased }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-muted">No users yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
