@@ -117,3 +117,37 @@ def admin_statistics(request):
     }
 
     return render(request, 'movies/admin_stats.html', {'template_data' : template_data})
+
+@login_required
+def admin_best_buyers(request):
+    if not request.user.is_superuser:
+            return HttpResponseForbidden("You do not have access to view this page.")
+    users = User.objects.annotate(
+        movies_purchased = Coalesce(Sum('order__item__quantity'), 0)
+    ).order_by('-movie_purchased', 'username')
+    total_users = users.count()
+    list_size = None
+    error = None
+    size_parameter = request.GET.get('size', '').strip()
+    if size_parameter:
+        try:
+            list_size = int(size_parameter)
+            if list_size < 1:
+                raise ValueError
+        except ValueError:
+            list_size = None
+            error = 'Size should be integer'
+
+    if list_size is not None:
+        users = users[:list_size]
+    users = list(users)
+
+    template_data = {
+            'title' : 'Best Buyers',
+            'users' : users,
+            'list_size' : list_size,
+            'shown_count' : len(users),
+            'total_users' : total_users,
+            'error' : error
+    }
+    return render(request, 'movies/admin_best_buyers.html', {'template_data' : template_data})
